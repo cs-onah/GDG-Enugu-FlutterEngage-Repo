@@ -88,17 +88,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                        value: _checkBoxValue,
-                        onChanged: (val){setState(() {
-                      _checkBoxValue = val;
-                    });}),
-                    SizedBox(width: 5,),
-                    Text("I am Human"),
-                  ],
+                GestureDetector(
+                  onTap: ()=> setState(() {
+                    _checkBoxValue = !_checkBoxValue;
+                  }),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: _checkBoxValue,
+                          onChanged: (val){setState(() {
+                        _checkBoxValue = val;
+                      });}),
+                      Text("I am Human"),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 30),
                 Row(
@@ -116,10 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   SnackBar(content: Text("Please verify your are a human."),));
                               return;
                             }
-                            print(
-                              '----------'
-                            );
-                            print(" username: ${_usernameController.text}, password: ${_passwordController.text}, Remember me: $_checkBoxValue}");
+
+                            //Form validation passed
+                            String data = "username: ${_usernameController.text} \npassword: ${_passwordController.text} \nI am human: $_checkBoxValue";
+                            _showLoginInfoDialog(content: data);
                           },
                           child: Text("Login",
                             style: TextStyle(
@@ -150,6 +154,34 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showLoginInfoDialog({String content}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text("Login details"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("$content"),
+            SizedBox(height: 10),
+            Center(
+              child: TextButton(
+                child: Text("Okay", style: TextStyle(color: Colors.white),),
+                onPressed: ()=> Navigator.pop(context),
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.blue[300],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+
     );
   }
 }
