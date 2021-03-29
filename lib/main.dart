@@ -1,192 +1,403 @@
 import 'package:flutter/material.dart';
 
+import 'account_model.dart';
+
 void main() {
   runApp(TechoCraft());
 }
-
 
 class TechoCraft extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(),
+      home: BankAccount(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-
-class LoginScreen extends StatefulWidget {
+class BankAccount extends StatefulWidget{
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _BankAccountState createState() => _BankAccountState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  //Controllers
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  bool _obscureText = true;
-  bool _checkBoxValue = false;
+class _BankAccountState extends State<BankAccount> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.account_circle_outlined,
+                  size: 45,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Account Balance",
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                'N ${BankAccountModel.accountBalance.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: ActionCard(
+                      icon: Icon(
+                        Icons.account_balance_wallet_outlined,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      text: 'Withdraw',
+                      color: Colors.pink[50],
+                      onPressed: () async{
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WithdrawScreen()));
+                        setState(() { });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ActionCard(
+                      icon: Icon(
+                        Icons.add_circle_outline,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      text: 'Deposit',
+                      color: Colors.amber[50],
+                      onPressed: () async{
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DepositScreen()));
+                        setState(() { });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20,),
+              InkWell(
+                onTap: ()=> ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          "...Still Under Construction")),
+                ),
+                child: Card(
+                  elevation: 10,
+                  color: Colors.blue[50],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Container(
+                    height: 300,
+                    padding: EdgeInsets.all(16),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add_circle, size: 45, color: Colors.grey,),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('Add Card',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class WithdrawScreen extends StatefulWidget {
+  @override
+  _WithdrawScreenState createState() => _WithdrawScreenState();
+}
+
+class _WithdrawScreenState extends State<WithdrawScreen> {
+  final TextEditingController _controller = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text("Login Screen"),
-        centerTitle: false,
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          onPressed: () => Navigator.pop(context),
+          color: Colors.black,
+        ),
+        title: Text(
+          'Withdrawal',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Container(
-            color: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 40),
-            child: SingleChildScrollView(
-              child: Column(
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(22),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 35,),
-                Icon(Icons.agriculture, color: Colors.blue, size: 65,),
-                SizedBox(height: 30,),
-                Text("Agrico", style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.blue),),
-                SizedBox(height: 30,),
-                //Username
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  'Enter Amount:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
                 TextFormField(
-                  controller: _usernameController,
-                  validator: (val) => val.length < 4 ? "Username too short" : null,
-                  decoration: InputDecoration(
-                    fillColor: Colors.grey[300],
-                    filled: true,
-                    border: InputBorder.none,
-                    hintText: "Username",
-                  ),
+                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (val) => int.tryParse(val) == null
+                      ? "Please Enter a valid number"
+                      : null,
                 ),
-                SizedBox(height: 15,),
-                //Password
-                TextFormField(
-                  controller: _passwordController,
-                  validator: (val) => val.length < 4 ? "Password too short" : null,
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    fillColor: Colors.grey[300],
-                    filled: true,
-                    border: InputBorder.none,
-                    hintText: "Password",
-                    suffixIcon: IconButton(
-                      icon: _obscureText ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                      onPressed: (){
-
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-
-                      },
-                    )
-                  ),
+                SizedBox(
+                  height: 80,
                 ),
-                SizedBox(height: 15),
-                GestureDetector(
-                  onTap: ()=> setState(() {
-                    _checkBoxValue = !_checkBoxValue;
-                  }),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                          value: _checkBoxValue,
-                          onChanged: (val){setState(() {
-                        _checkBoxValue = val;
-                      });}),
-                      Text("I am Human"),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 30),
                 Row(
                   children: [
                     Expanded(
                       child: SizedBox(
-                        height: 50,
+                        height: 60,
                         child: TextButton(
-                          onPressed: (){
-
+                          onPressed: () {
                             if (!_formKey.currentState.validate()) return;
-
-                            if(_checkBoxValue == false){
+                            try {
+                              BankAccountModel.withdraw(
+                                  double.parse(_controller.text));
+                              Navigator.pop(context);
+                            } on InsufficientFundsException {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Please verify your are a human."),));
-                              return;
+                                SnackBar(
+                                    content: Text(
+                                        "You do not have sufficient balance")),
+                              );
                             }
-
-                            //Form validation passed
-                            String data = "username: ${_usernameController.text} \npassword: ${_passwordController.text} \nI am human: $_checkBoxValue";
-                            _showLoginInfoDialog(content: data);
                           },
-                          child: Text("Login",
+                          child: Text(
+                            'Withdraw',
                             style: TextStyle(
-                              color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.pink[400],
+                          ),
                         ),
-                      ),),
+                      ),
                     ),
                   ],
                 ),
-
-                SizedBox(height: 20,),
-                Text("Forgot Password?",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 16,
-                  ),
-                )
-
               ],
-              ),
             ),
           ),
         ),
       ),
     );
   }
+}
 
-  void _showLoginInfoDialog({String content}) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text("Login details"),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("$content"),
-            SizedBox(height: 10),
-            Center(
-              child: TextButton(
-                child: Text("Okay", style: TextStyle(color: Colors.white),),
-                onPressed: ()=> Navigator.pop(context),
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.blue[300],
+class DepositScreen extends StatelessWidget {
+  final TextEditingController _controller = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          onPressed: () => Navigator.pop(context),
+          color: Colors.black,
+        ),
+        title: Text(
+          'Deposit',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(22),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 30,
                 ),
-              ),
+                Text(
+                  'Enter Amount:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (val) => int.tryParse(val) == null
+                      ? "Please Enter a valid number"
+                      : null,
+                ),
+                SizedBox(
+                  height: 80,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 60,
+                        child: TextButton(
+                          onPressed: () {
+                            if (!_formKey.currentState.validate()) return;
+                            try {
+                              BankAccountModel.deposit(
+                                  double.parse(_controller.text));
+                              Navigator.pop(context);
+                            } on InvalidEntry {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        "Please enter a valid positive value")),
+                              );
+                            }
+                          },
+                          child: Text(
+                            'Deposit',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.amber[400],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-
     );
   }
 }
 
+class ActionCard extends StatelessWidget {
+  Function onPressed;
+  String text;
+  Icon icon;
+  Color color;
+  ActionCard({Key key, this.color, this.text, this.icon, this.onPressed})
+      : super(key: key);
 
-
-
-
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      child: Card(
+        elevation: 20,
+        color: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+        ),
+        child: Container(
+          height: 150,
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              icon,
+              SizedBox(
+                height: 20,
+              ),
+              Text('$text',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
