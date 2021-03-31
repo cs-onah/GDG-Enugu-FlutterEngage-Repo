@@ -223,7 +223,14 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                               BankAccountModel.withdraw(
                                   double.parse(_controller.text));
                               Navigator.pop(context);
-                            } on InsufficientFundsException {
+                            } on NegativeException {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        "Negative values not allowed")),
+                              );
+                            }
+                            on InsufficientFundsException {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                     content: Text(
@@ -326,6 +333,12 @@ class DepositScreen extends StatelessWidget {
                               BankAccountModel.deposit(
                                   double.parse(_controller.text));
                               Navigator.pop(context);
+                            } on NegativeException {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        "Negative values not allowed")),
+                              );
                             } on InvalidEntry {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
