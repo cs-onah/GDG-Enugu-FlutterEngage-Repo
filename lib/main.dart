@@ -16,7 +16,7 @@ class TechoCraft extends StatelessWidget {
   }
 }
 
-class BankAccount extends StatefulWidget{
+class BankAccount extends StatefulWidget {
   @override
   _BankAccountState createState() => _BankAccountState();
 }
@@ -71,12 +71,12 @@ class _BankAccountState extends State<BankAccount> {
                       ),
                       text: 'Withdraw',
                       color: Colors.pink[50],
-                      onPressed: () async{
+                      onPressed: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => WithdrawScreen()));
-                        setState(() { });
+                        setState(() {});
                       },
                     ),
                   ),
@@ -92,23 +92,23 @@ class _BankAccountState extends State<BankAccount> {
                       ),
                       text: 'Deposit',
                       color: Colors.amber[50],
-                      onPressed: () async{
+                      onPressed: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DepositScreen()));
-                        setState(() { });
+                        setState(() {});
                       },
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               InkWell(
-                onTap: ()=> ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          "...Still Under Construction")),
+                onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("...Still Under Construction")),
                 ),
                 child: Card(
                   elevation: 10,
@@ -125,7 +125,11 @@ class _BankAccountState extends State<BankAccount> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.add_circle, size: 45, color: Colors.grey,),
+                          Icon(
+                            Icons.add_circle,
+                            size: 45,
+                            color: Colors.grey,
+                          ),
                           SizedBox(
                             height: 20,
                           ),
@@ -226,11 +230,10 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                             } on NegativeException {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                    content: Text(
-                                        "Negative values not allowed")),
+                                    content:
+                                        Text("Negative values not allowed")),
                               );
-                            }
-                            on InsufficientFundsException {
+                            } on InsufficientFundsException {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                     content: Text(
@@ -336,8 +339,8 @@ class DepositScreen extends StatelessWidget {
                             } on NegativeException {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                    content: Text(
-                                        "Negative values not allowed")),
+                                    content:
+                                        Text("Negative values not allowed")),
                               );
                             } on InvalidEntry {
                               ScaffoldMessenger.of(context).showSnackBar(
